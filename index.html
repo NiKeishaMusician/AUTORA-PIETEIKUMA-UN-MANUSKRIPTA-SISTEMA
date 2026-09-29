@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Autora pieteikums</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+<form id="forma" action="submit.php" method="post" enctype="multipart/form-data">
+  <h2>Grāmatas izdošanas pieteikums</h2>
+  <div id="kludas"></div>
+
+
+  <fieldset>
+    <legend>Autora informācija</legend>
+    <label>Vārds</label>
+    <input type="text" name="vards" required>
+    <label>Uzvārds</label>
+    <input type="text" name="uzvards" required>
+    <label>E-pasts</label>
+    <input type="email" name="epasts" required>
+    <label>Tālrunis</label>
+    <input type="tel" name="talrunis" required>
+  </fieldset>
+
+  <fieldset>
+    <legend>Informācija par grāmatu</legend>
+    <label>Nosaukums</label>
+    <input type="text" name="nosaukums" required>
+    <label>Žanrs</label>
+    <select name="zanrs" required>
+      <option value="">-- izvēlies --</option>
+      <option>Romāns</option>
+      <option>Dzeja</option>
+      <option>Bērnu literatūra</option>
+      <option>Zinātniskā fantastika</option>
+      <option>Detektīvs</option>
+      <option>Zinātniskā literatūra</option>
+      <option>Cits</option>
+    </select>
+    <label>Īss apraksts</label>
+    <textarea name="apraksts" rows="4" required></textarea>
+    <label>Lappušu skaits</label>
+    <input type="number" name="lappusu_skaits" min="1" required>
+    <label>Plānotā tirāža</label>
+    <input type="number" name="tiraza" min="1" required>
+    <label>Vēlamais izdošanas laiks</label>
+    <input type="date" name="izdosanas_laiks" required>
+  </fieldset>
+
+  <fieldset>
+    <legend>Manuskripts</legend>
+    <label>Fails (PDF, DOC vai DOCX, līdz 10 MB)</label>
+    <input type="file" name="manuskripts" id="manuskripts" accept=".pdf,.doc,.docx" required>
+  </fieldset>
+
+  <button type="submit">Nosūtīt pieteikumu</button>
+</form>
+
+<script>
+  const forma = document.getElementById('forma');
+  const kludas = document.getElementById('kludas');
+  const atlautie = ['pdf', 'doc', 'docx'];
+  const maksMB = 10;
+
+  forma.addEventListener('submit', function (e) {
+    kludas.textContent = '';
+    const fails = document.getElementById('manuskripts').files[0];
+
+    if (!fails) {
+      kludas.textContent = 'Lūdzu pievieno manuskriptu.';
+      e.preventDefault();
+      return;
+    }
+
+    const paplasinajums = fails.name.split('.').pop().toLowerCase();
+    if (!atlautie.includes(paplasinajums)) {
+      kludas.textContent = 'Atļauti tikai PDF, DOC un DOCX faili.';
+      e.preventDefault();
+      return;
+    }
+
+    if (fails.size > maksMB * 1024 * 1024) {
+      kludas.textContent = 'Fails ir par lielu. Maksimālais izmērs ir ' + maksMB + ' MB.';
+      e.preventDefault();
+    }
+  });
+</script>
+
+</body>
+</html>
