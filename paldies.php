@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="nav-josla">
+    <a href="admin.php" class="nav-poga">🛠 Administrācijas panelis</a>
+  </div>
+
   <div class="paldies-karte">
     <div class="ikona">✓</div>
     <h2>Paldies! Jūsu pieteikums ir saņemts.</h2>
