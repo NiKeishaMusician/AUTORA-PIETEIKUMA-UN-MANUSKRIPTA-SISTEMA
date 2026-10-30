@@ -1,298 +1,303 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  margin: 0;
-  padding: 40px 20px;
-  min-height: 100vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0;
+    padding: 40px 20px;
+    min-height: 100vh;
 }
 
 /* ===== NAVIGĀCIJAS POGA ===== */
 
 .nav-josla {
-  text-align: center;
-  margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .nav-poga {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(6px);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  padding: 10px 20px;
-  border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  transition: background 0.2s, transform 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    transition: background 0.2s, transform 0.15s;
 }
 
 .nav-poga:hover {
-  background: rgba(255, 255, 255, 0.28);
-  transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.28);
+    transform: translateY(-2px);
 }
 
 /* ===== FORMA (index.html) ===== */
 
 form {
-  max-width: 650px;
-  margin: auto;
-  background: #ffffff;
-  padding: 35px 40px;
-  border-radius: 16px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    max-width: 650px;
+    margin: auto;
+    background: #ffffff;
+    padding: 35px 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
 }
 
 form h2 {
-  text-align: center;
-  color: #3b2f63;
-  margin-top: 0;
-  margin-bottom: 25px;
-  font-size: 26px;
+    text-align: center;
+    color: #3b2f63;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 26px;
 }
 
 fieldset {
-  border: none;
-  background: #f8f7fc;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  padding: 20px 22px;
-  border-left: 4px solid #764ba2;
+    border: none;
+    background: #f8f7fc;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    padding: 20px 22px;
+    border-left: 4px solid #764ba2;
 }
 
 legend {
-  font-weight: 600;
-  padding: 0 10px;
-  color: #764ba2;
-  font-size: 15px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+    font-weight: 600;
+    padding: 0 10px;
+    color: #764ba2;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 label {
-  display: block;
-  margin: 14px 0 5px;
-  font-size: 14px;
-  color: #444;
-  font-weight: 500;
+    display: block;
+    margin: 14px 0 5px;
+    font-size: 14px;
+    color: #444;
+    font-weight: 500;
 }
 
 input, select, textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #d8d4e8;
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: inherit;
-  transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d8d4e8;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: #764ba2;
-  box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.15);
+    outline: none;
+    border-color: #764ba2;
+    box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.15);
 }
 
 textarea {
-  resize: vertical;
+    resize: vertical;
 }
 
 button {
-  width: 100%;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: #fff;
-  border: 0;
-  padding: 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 10px;
-  transition: transform 0.15s, box-shadow 0.15s;
+    width: 100%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: 0;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: transform 0.15s, box-shadow 0.15s;
 }
 
 button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(118, 75, 162, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(118, 75, 162, 0.35);
 }
 
 #kludas {
-  color: #c53030;
-  background: #fff5f5;
-  border: 1px solid #feb2b2;
-  border-radius: 8px;
-  padding: 10px 14px;
-  margin-bottom: 18px;
-  font-size: 14px;
+    color: #c53030;
+    background: #fff5f5;
+    border: 1px solid #feb2b2;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+    font-size: 14px;
 }
 
 #kludas:empty {
-  display: none;
+    display: none;
 }
 
 /* ===== PALDIES LAPA (paldies.php) ===== */
 
 .paldies-karte {
-  max-width: 500px;
-  margin: 20px auto;
-  background: #ffffff;
-  padding: 45px 40px;
-  border-radius: 16px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-  text-align: center;
+    max-width: 500px;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 45px 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    text-align: center;
 }
 
 .ikona {
-  width: 70px;
-  height: 70px;
-  line-height: 70px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #48bb78, #38a169);
-  color: #fff;
-  font-size: 34px;
-  margin: 0 auto 20px;
-  box-shadow: 0 8px 20px rgba(72, 187, 120, 0.35);
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    color: #fff;
+    font-size: 34px;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 20px rgba(72, 187, 120, 0.35);
 }
 
 .paldies-karte h2 {
-  color: #3b2f63;
-  margin: 0 0 12px;
-  font-size: 24px;
+    color: #3b2f63;
+    margin: 0 0 12px;
+    font-size: 24px;
 }
 
 .apraksts {
-  color: #666;
-  font-size: 15px;
-  margin-bottom: 25px;
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 25px;
 }
 
 .numurs-kaste {
-  background: #f8f7fc;
-  border-left: 4px solid #764ba2;
-  border-radius: 10px;
-  padding: 16px 20px;
-  margin-bottom: 25px;
+    background: #f8f7fc;
+    border-left: 4px solid #764ba2;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 25px;
 }
 
 .numurs-etikete {
-  display: block;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #764ba2;
-  font-weight: 600;
-  margin-bottom: 6px;
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #764ba2;
+    font-weight: 600;
+    margin-bottom: 6px;
 }
 
 .numurs {
-  display: block;
-  font-size: 22px;
-  font-weight: 700;
-  color: #3b2f63;
-  letter-spacing: 1px;
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    color: #3b2f63;
+    letter-spacing: 1px;
 }
 
 .poga-atpakal {
-  display: inline-block;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: #fff;
-  text-decoration: none;
-  padding: 12px 28px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
-  transition: transform 0.15s, box-shadow 0.15s;
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: transform 0.15s, box-shadow 0.15s;
 }
 
 .poga-atpakal:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(118, 75, 162, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(118, 75, 162, 0.35);
 }
 
 /* ===== ADMINISTRĀCIJAS LAPA (admin.php) ===== */
 
 .admin-apvalks {
-  max-width: 1200px;
-  margin: 40px auto;
-  background: #ffffff;
-  padding: 35px 40px;
-  border-radius: 16px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-  overflow-x: auto;
+    max-width: 1200px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 35px 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.admin-tabula-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    max-width: 100%;
 }
 
 .admin-apvalks h2 {
-  color: #3b2f63;
-  margin-top: 0;
+    color: #3b2f63;
+    margin-top: 0;
 }
 
 .admin-tabula {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
 }
 
 .admin-tabula th {
-  background: #764ba2;
-  color: #fff;
-  padding: 10px 12px;
-  text-align: left;
-  white-space: nowrap;
+    background: #764ba2;
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    white-space: nowrap;
 }
 
 .admin-tabula td {
-  padding: 10px 12px;
-  border-bottom: 1px solid #eee;
-  vertical-align: top;
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
 }
 
 .admin-tabula tr:hover {
-  background: #f8f7fc;
+    background: #f8f7fc;
 }
 
 .lejupieladet {
-  color: #764ba2;
-  font-weight: 600;
-  text-decoration: none;
+    color: #764ba2;
+    font-weight: 600;
+    text-decoration: none;
 }
 
 .lejupieladet:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .dzest-poga {
-  color: #c53030;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 13px;
+    color: #c53030;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 13px;
 }
 
 .dzest-poga:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .nav-poga-admin {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #f8f7fc;
-  color: #764ba2;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  padding: 10px 20px;
-  border-radius: 30px;
-  border: 1px solid #e4e0f2;
-  transition: background 0.2s, transform 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8f7fc;
+    color: #764ba2;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 1px solid #e4e0f2;
+    transition: background 0.2s, transform 0.15s;
 }
 
 .nav-poga-admin:hover {
-  background: #eee9f8;
-  transform: translateY(-2px);
+    background: #eee9f8;
+    transform: translateY(-2px);
 }

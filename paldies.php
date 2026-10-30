@@ -1,4 +1,6 @@
-<?php $nr = $_GET['nr'] ?? ''; ?>
+<?php 
+$nr = $_GET['nr'] ?? ''; 
+?>
 <!DOCTYPE html>
 <html lang="lv">
 <head>
@@ -16,10 +18,14 @@
     <div class="ikona">✓</div>
     <h2>Paldies! Jūsu pieteikums ir saņemts.</h2>
     <p class="apraksts">Mēs izskatīsim jūsu manuskriptu un sazināsimies ar jums tuvākajā laikā.</p>
-    <div class="numurs-kaste">
-      <span class="numurs-etikete">Pieteikuma numurs</span>
-      <span class="numurs"><?= htmlspecialchars($nr) ?></span>
-    </div>
+    
+    <?php if (!empty($nr)): ?>
+      <div class="numurs-kaste">
+        <span class="numurs-etikete">Pieteikuma numurs</span>
+        <span class="numurs"><?= htmlspecialchars($nr) ?></span>
+      </div>
+    <?php endif; ?>
+
     <a href="index.html" class="poga-atpakal">Iesniegt jaunu pieteikumu</a>
   </div>
 </body>

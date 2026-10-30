@@ -78,14 +78,18 @@ $stmt->execute($dati + [
     'faila_cels'      => $cels,
 ]);
 
-// 6. Pieteikuma numurs no ieraksta id, piemēram, PIET-2026-0001
+// 6. Pieteikuma numurs no ieraksta id
 $id = $pdo->lastInsertId();
 $nr = 'PIET-' . date('Y') . '-' . str_pad($id, 4, '0', STR_PAD_LEFT);
 $pdo->prepare('UPDATE pieteikumi SET pieteikuma_nr = ? WHERE id = ?')->execute([$nr, $id]);
 
-// 7. Nosūtām apstiprinājuma e-pastu
-require 'epasts.php';
-nosutitApstiprinajumu($dati['epasts'], $dati['vards'], $nr);
+// 7. Nosūtām apstiprinājuma e-pastu, ja fails eksistē
+if (file_exists('epasts.php')) {
+    require 'epasts.php';
+    if (function_exists('nosutitApstiprinajumu')) {
+        nosutitApstiprinajumu($dati['epasts'], $dati['vards'], $nr);
+    }
+}
 
 header('Location: paldies.php?nr=' . urlencode($nr));
 exit;
