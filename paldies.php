@@ -1,5 +1,13 @@
-<?php 
-$nr = $_GET['nr'] ?? ''; 
+<?php
+session_start();
+
+// Paldies lapu rāda tikai pēc īsta pieteikuma nosūtīšanas
+if (empty($_SESSION['paldies_nr'])) {
+    header('Location: index.html');
+    exit;
+}
+
+$nr = $_SESSION['paldies_nr'];
 ?>
 <!DOCTYPE html>
 <html lang="lv">
@@ -18,14 +26,10 @@ $nr = $_GET['nr'] ?? '';
     <div class="ikona">✓</div>
     <h2>Paldies! Jūsu pieteikums ir saņemts.</h2>
     <p class="apraksts">Mēs izskatīsim jūsu manuskriptu un sazināsimies ar jums tuvākajā laikā.</p>
-    
-    <?php if (!empty($nr)): ?>
-      <div class="numurs-kaste">
-        <span class="numurs-etikete">Pieteikuma numurs</span>
-        <span class="numurs"><?= htmlspecialchars($nr) ?></span>
-      </div>
-    <?php endif; ?>
-
+    <div class="numurs-kaste">
+      <span class="numurs-etikete">Pieteikuma numurs</span>
+      <span class="numurs"><?= htmlspecialchars($nr) ?></span>
+    </div>
     <a href="index.html" class="poga-atpakal">Iesniegt jaunu pieteikumu</a>
   </div>
 </body>

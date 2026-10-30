@@ -4,30 +4,29 @@ require 'vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// ===== IESTATĪJUMI (maini tikai šeit) =====
-const SMTP_EPASTS     = 'izdevniecibademo@gmail.com';
-const SMTP_PAROLE     = 'kkvv hwoy mrvb brrv';   // <- ieliec savu 16 zīmju paroli
-const SUTITAJA_VARDS  = 'Izdevniecība';
-const ATBILDES_EPASTS = '';                         // piem., 'diana@izdevnieciba.lv'. Tukšs = nav
-// ==========================================
-
 function nosutitApstiprinajumu($saniemeja_epasts, $vards, $pieteikuma_nr) {
+    $smtpEpasts = getenv('SMTP_USER') ?: 'izdevniecibademo@gmail.com';
+    $smtpParole = getenv('SMTP_PASS') ?: 'kkvv hwoy mrvb brrv';
+
+    if ($smtpParole === '') {
+        error_log('E-pasts nav nosūtīts: nav iestatīts SMTP_PASS.');
+        return false;
+    }
+
     $mail = new PHPMailer(true);
 
     try {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = SMTP_EPASTS;
-        $mail->Password   = SMTP_PAROLE;
+        $mail->Username   = $smtpEpasts;
+        $mail->Password   = $smtpParole;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
         $mail->CharSet    = 'UTF-8';
+        $mail->Timeout    = 8;
 
-        $mail->setFrom(SMTP_EPASTS, SUTITAJA_VARDS);
-        if (ATBILDES_EPASTS !== '') {
-            $mail->addReplyTo(ATBILDES_EPASTS, SUTITAJA_VARDS);
-        }
+        $mail->setFrom($smtpEpasts, 'Izdevniecība');
         $mail->addAddress($saniemeja_epasts, $vards);
 
         $vardsDrosi = htmlspecialchars($vards);

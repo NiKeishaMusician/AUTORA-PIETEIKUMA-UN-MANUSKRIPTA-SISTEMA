@@ -1,4 +1,5 @@
 <?php
+session_start();
 require 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -57,6 +58,11 @@ if ($kludas) {
 }
 
 // 4. Saglabājam failu ar unikālu nosaukumu
+$uploadsMape = __DIR__ . '/uploads';
+if (!is_dir($uploadsMape)) {
+    mkdir($uploadsMape, 0755, true);
+}
+
 $jaunsNosaukums = bin2hex(random_bytes(8)) . '.' . $paplasinajums;
 $cels = 'uploads/' . $jaunsNosaukums;
 
@@ -64,32 +70,44 @@ if (!move_uploaded_file($fails['tmp_name'], __DIR__ . '/' . $cels)) {
     exit('Neizdevās saglabāt failu.');
 }
 
-// 5. Ierakstām datubāzē
+// 5. Ierakstām datubāzē (laiks tiek ņemts no PHP, Latvijas laika joslā)
+$tagad = date('Y-m-d H:i:s');
+
 $sql = "INSERT INTO pieteikumi
         (vards, uzvards, epasts, talrunis, nosaukums, zanrs, apraksts,
-         lappusu_skaits, tiraza, izdosanas_laiks, faila_nosaukums, faila_cels)
+         lappusu_skaits, tiraza, izdosanas_laiks, faila_nosaukums, faila_cels,
+         sanemts_datums, statuss_mainits)
         VALUES
         (:vards, :uzvards, :epasts, :talrunis, :nosaukums, :zanrs, :apraksts,
-         :lappusu_skaits, :tiraza, :izdosanas_laiks, :faila_nosaukums, :faila_cels)";
+         :lappusu_skaits, :tiraza, :izdosanas_laiks, :faila_nosaukums, :faila_cels,
+         :sanemts_datums, :statuss_mainits)";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute($dati + [
     'faila_nosaukums' => $fails['name'],
     'faila_cels'      => $cels,
+    'sanemts_datums'  => $tagad,
+    'statuss_mainits' => $tagad,
 ]);
 
-// 6. Pieteikuma numurs no ieraksta id
+// 6. Pieteikuma numurs no ieraksta id, piemēram, PIET-2026-0001
 $id = $pdo->lastInsertId();
 $nr = 'PIET-' . date('Y') . '-' . str_pad($id, 4, '0', STR_PAD_LEFT);
 $pdo->prepare('UPDATE pieteikumi SET pieteikuma_nr = ? WHERE id = ?')->execute([$nr, $id]);
 
-// 7. Nosūtām apstiprinājuma e-pastu, ja fails eksistē
-if (file_exists('epasts.php')) {
-    require 'epasts.php';
-    if (function_exists('nosutitApstiprinajumu')) {
+// 7. Atceramies numuru paldies lapai (PIRMS e-pasta, lai paldies lapa vienmēr parādās)
+$_SESSION['paldies_nr'] = $nr;
+session_write_close();
+
+// 8. E-pasts: ja tas neizdodas, pieteikums tāpat tiek pieņemts
+try {
+    if (file_exists(__DIR__ . '/vendor/autoload.php') && file_exists(__DIR__ . '/epasts.php')) {
+        require 'epasts.php';
         nosutitApstiprinajumu($dati['epasts'], $dati['vards'], $nr);
     }
+} catch (Throwable $e) {
+    error_log('E-pasta kļūda: ' . $e->getMessage());
 }
 
-header('Location: paldies.php?nr=' . urlencode($nr));
+header('Location: paldies.php');
 exit;
