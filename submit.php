@@ -57,13 +57,20 @@ if ($kludas) {
     exit;
 }
 
-// 4. Atveram augšupielādēto failu lasīšanai
-$saturs = fopen($fails['tmp_name'], 'rb');
-if ($saturs === false) {
-    exit('Neizdevās nolasīt failu.');
+// 4. Saglabājam failu ar unikālu nosaukumu
+$uploadsMape = __DIR__ . '/uploads';
+if (!is_dir($uploadsMape)) {
+    mkdir($uploadsMape, 0755, true);
 }
 
-// 5. Pieteikums un manuskripts tiek saglabāti vienā darbībā
+$jaunsNosaukums = bin2hex(random_bytes(8)) . '.' . $paplasinajums;
+$cels = 'uploads/' . $jaunsNosaukums;
+
+if (!move_uploaded_file($fails['tmp_name'], __DIR__ . '/' . $cels)) {
+    exit('Neizdevās saglabāt failu.');
+}
+
+// 5. Ierakstām datubāzē (laiks tiek ņemts no PHP, Latvijas laika joslā)
 $tagad = date('Y-m-d H:i:s');
 
 $sql = "INSERT INTO pieteikumi
@@ -75,53 +82,31 @@ $sql = "INSERT INTO pieteikumi
          :lappusu_skaits, :tiraza, :izdosanas_laiks, :faila_nosaukums, :faila_cels,
          :sanemts_datums, :statuss_mainits)";
 
-try {
-    $pdo->beginTransaction();
+$stmt = $pdo->prepare($sql);
+$stmt->execute($dati + [
+    'faila_nosaukums' => $fails['name'],
+    'faila_cels'      => $cels,
+    'sanemts_datums'  => $tagad,
+    'statuss_mainits' => $tagad,
+]);
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($dati + [
-        'faila_nosaukums' => $fails['name'],
-        'faila_cels'      => 'datubaze',
-        'sanemts_datums'  => $tagad,
-        'statuss_mainits' => $tagad,
-    ]);
+// 6. Pieteikuma numurs no ieraksta id, piemēram, PIET-2026-0001
+$id = $pdo->lastInsertId();
+$nr = 'PIET-' . date('Y') . '-' . str_pad($id, 4, '0', STR_PAD_LEFT);
+$pdo->prepare('UPDATE pieteikumi SET pieteikuma_nr = ? WHERE id = ?')->execute([$nr, $id]);
 
-    // Pieteikuma numurs no ieraksta id, piemēram, PIET-2026-0001
-    $id = $pdo->lastInsertId();
-    $nr = 'PIET-' . date('Y') . '-' . str_pad($id, 4, '0', STR_PAD_LEFT);
-    $pdo->prepare('UPDATE pieteikumi SET pieteikuma_nr = ? WHERE id = ?')->execute([$nr, $id]);
-
-    // Manuskripta saturs
-    $stmt = $pdo->prepare('INSERT INTO faili (pieteikuma_id, saturs) VALUES (:id, :saturs)');
-    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-    $stmt->bindParam(':saturs', $saturs, PDO::PARAM_LOB);
-    $stmt->execute();
-
-    $pdo->commit();
-} catch (Throwable $e) {
-    if ($pdo->inTransaction()) {
-        $pdo->rollBack();
-    }
-    error_log('Pieteikuma saglabāšanas kļūda: ' . $e->getMessage());
-    exit('Neizdevās saglabāt pieteikumu. Lūdzu, mēģiniet vēlreiz. <a href="index.html">Atpakaļ uz formu</a>');
-}
-
-fclose($saturs);
-
-// 6. Atceramies numuru paldies lapai
+// 7. Atceramies numuru paldies lapai (PIRMS e-pasta, lai paldies lapa vienmēr parādās)
 $_SESSION['paldies_nr'] = $nr;
 session_write_close();
 
-// 7. E-pasts tiek sūtīts tikai tad, ja vidē ir SMTP_ENABLED=1
-if (getenv('SMTP_ENABLED') === '1') {
-    try {
-        if (file_exists(__DIR__ . '/vendor/autoload.php') && file_exists(__DIR__ . '/epasts.php')) {
-            require 'epasts.php';
-            nosutitApstiprinajumu($dati['epasts'], $dati['vards'], $nr);
-        }
-    } catch (Throwable $e) {
-        error_log('E-pasta kļūda: ' . $e->getMessage());
+// 8. E-pasts: ja tas neizdodas, pieteikums tāpat tiek pieņemts
+try {
+    if (file_exists(__DIR__ . '/vendor/autoload.php') && file_exists(__DIR__ . '/epasts.php')) {
+        require 'epasts.php';
+        nosutitApstiprinajumu($dati['epasts'], $dati['vards'], $nr);
     }
+} catch (Throwable $e) {
+    error_log('E-pasta kļūda: ' . $e->getMessage());
 }
 
 header('Location: paldies.php');

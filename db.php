@@ -14,7 +14,7 @@ try {
     $pdo->exec("SET TIME ZONE 'Europe/Riga'");
 
     // Tabulu un konta sagatavošana notiek tikai vienreiz uz servera palaišanu
-    $karogs = sys_get_temp_dir() . '/db_gatavs_v2.flag';
+    $karogs = sys_get_temp_dir() . '/db_gatavs_v1.flag';
 
     if (!file_exists($karogs)) {
 
@@ -57,14 +57,6 @@ try {
             izveidots TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );");
 
-        // Manuskriptu saturs (atsevišķa tabula, lai saraksts paliktu ātrs)
-        $pdo->exec("CREATE TABLE IF NOT EXISTS faili (
-            id SERIAL PRIMARY KEY,
-            pieteikuma_id INT NOT NULL UNIQUE REFERENCES pieteikumi(id) ON DELETE CASCADE,
-            saturs BYTEA NOT NULL,
-            izveidots TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );");
-
         // 2. Trūkstošās kolonnas vecākās tabulās
         $pdo->exec("ALTER TABLE pieteikumi ADD COLUMN IF NOT EXISTS statuss VARCHAR(50) NOT NULL DEFAULT 'Saņemts';");
         $pdo->exec("ALTER TABLE pieteikumi ADD COLUMN IF NOT EXISTS statuss_mainits TIMESTAMP DEFAULT CURRENT_TIMESTAMP;");
@@ -90,6 +82,7 @@ try {
         $esosaisHash = $st->fetchColumn();
 
         if ($adminParole === false || strlen($adminParole) < 12) {
+            // Nav derīgas paroles: izdzēšam vecā nedrošā konta paroli (admin123)
             if ($esosaisHash !== false && password_verify('admin123', $esosaisHash)) {
                 $pdo->prepare('DELETE FROM lietotaji WHERE lietotajvards = ?')->execute(['admin']);
             }

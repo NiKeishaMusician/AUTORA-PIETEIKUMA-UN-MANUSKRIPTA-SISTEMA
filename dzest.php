@@ -14,16 +14,10 @@ $stmt->execute([$id]);
 $pieteikums = $stmt->fetch();
 
 if ($pieteikums) {
-    // Vecie pieteikumi: izdzēšam failu no diska, ja tas vēl eksistē
-    $uploadsMape = realpath(__DIR__ . '/uploads');
-    $fails = $uploadsMape ? realpath(__DIR__ . '/' . $pieteikums['faila_cels']) : false;
-    if ($fails !== false
-        && strpos($fails, $uploadsMape . DIRECTORY_SEPARATOR) === 0
-        && is_file($fails)) {
-        unlink($fails);
+    $failaCels = __DIR__ . '/' . $pieteikums['faila_cels'];
+    if (file_exists($failaCels)) {
+        unlink($failaCels);
     }
-
-    // Pieteikuma dzēšana izdzēš arī manuskriptu (tabula faili) un saziņas piezīmes
     $pdo->prepare('DELETE FROM pieteikumi WHERE id = ?')->execute([$id]);
 }
 
