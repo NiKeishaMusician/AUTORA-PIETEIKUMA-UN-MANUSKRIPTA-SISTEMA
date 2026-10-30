@@ -96,7 +96,7 @@ $sodien = date('Y-m-d');
 <body>
   <div class="admin-apvalks" style="max-width: 900px;">
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
       <h2 style="margin: 0;">Pieteikums <?= htmlspecialchars($p['pieteikuma_nr']) ?></h2>
       <div style="display: flex; gap: 10px;">
         <a href="admin.php" class="nav-poga-admin">← Uz sarakstu</a>
@@ -114,7 +114,7 @@ $sodien = date('Y-m-d');
       <strong>Lappuses:</strong> <?= htmlspecialchars($p['lappusu_skaits']) ?>
       &nbsp;|&nbsp; <strong>Tirāža:</strong> <?= htmlspecialchars($p['tiraza']) ?>
       &nbsp;|&nbsp; <strong>Vēlamais izdošanas laiks:</strong> <?= htmlspecialchars($p['izdosanas_laiks']) ?><br>
-      <strong>Saņemts:</strong> <?= htmlspecialchars($p['sanemts_datums']) ?><br>
+      <strong>Saņemts:</strong> <?= date('d.m.Y H:i', strtotime($p['sanemts_datums'])) ?><br>
       <strong>Statuss:</strong> <?= htmlspecialchars($p['statuss']) ?><br>
       <strong>Manuskripts:</strong>
       <a href="lejupielade.php?id=<?= $p['id'] ?>" class="lejupieladet">
