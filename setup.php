@@ -2,7 +2,6 @@
 require_once 'db.php';
 
 try {
-    // Izveido tabulu 'lietotaji'
     $pdo->exec("CREATE TABLE IF NOT EXISTS lietotaji (
         id SERIAL PRIMARY KEY,
         lietotajvards VARCHAR(50) UNIQUE NOT NULL,
@@ -10,7 +9,6 @@ try {
         izveidots TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );");
 
-    // Izveido tabulu 'pieteikumi'
     $pdo->exec("CREATE TABLE IF NOT EXISTS pieteikumi (
         id SERIAL PRIMARY KEY,
         vards VARCHAR(100) NOT NULL,
@@ -24,16 +22,14 @@ try {
         izveidots TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );");
 
-    // Izveido noklusējuma administratora lietotāju (lietotājvārds: admin, parole: admin123)
     $defaultAdmin = 'admin';
     $defaultHash = password_hash('admin123', PASSWORD_DEFAULT);
-    
+
     $stmt = $pdo->prepare("INSERT INTO lietotaji (lietotajvards, paroles_hash) VALUES (?, ?) ON CONFLICT (lietotajvards) DO NOTHING");
     $stmt->execute([$defaultAdmin, $defaultHash]);
 
     echo "<h2>Tabulas un admin lietotājs veiksmīgi izveidoti!</h2>";
-    echo "<p>Admin pieteikšanās: lietotājvārds: <b>admin</b>, parole: <b>admin123</b></p>";
 } catch (PDOException $e) {
-    echo "Kļūda veidojot tabulas: " . $e->getMessage();
+    echo "Kļūda: " . $e->getMessage();
 }
 ?>
