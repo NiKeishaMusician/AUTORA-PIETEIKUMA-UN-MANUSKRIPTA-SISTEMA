@@ -8,7 +8,7 @@ try {
     $pdo = new PDO("pgsql:host=$host;dbname=$db", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Automātiski izveidojam visas nepieciešamās tabulas un kolonnas
+    // 1. Tabula 'lietotaji'
     $pdo->exec("CREATE TABLE IF NOT EXISTS lietotaji (
         id SERIAL PRIMARY KEY,
         lietotajvards VARCHAR(50) UNIQUE NOT NULL,
@@ -16,32 +16,44 @@ try {
         izveidots TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );");
 
+    // 2. Tabula 'pieteikumi' (pielāgota precīzi tavai struktūrai)
     $pdo->exec("CREATE TABLE IF NOT EXISTS pieteikumi (
         id SERIAL PRIMARY KEY,
+        pieteikuma_nr VARCHAR(20) UNIQUE,
         vards VARCHAR(100) NOT NULL,
-        epasts VARCHAR(100) NOT NULL,
-        talrunis VARCHAR(30),
-        nosaukums VARCHAR(255) NOT NULL,
-        zanrs VARCHAR(100),
-        apraksts TEXT,
-        faila_cels VARCHAR(255),
-        statusa_kods VARCHAR(20) DEFAULT 'jauns',
-        statuss VARCHAR(50) DEFAULT 'Saņemts',
-        statuss_mainits TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        izveidots TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        uzvards VARCHAR(100) NOT NULL,
+        epasts VARCHAR(150) NOT NULL,
+        talrunis VARCHAR(30) NOT NULL,
+        nosaukums VARCHAR(200) NOT NULL,
+        zanrs VARCHAR(100) NOT NULL,
+        apraksts TEXT NOT NULL,
+        lappusu_skaits INT NOT NULL DEFAULT 0,
+        tiraza INT NOT NULL DEFAULT 0,
+        izdosanas_laiks DATE DEFAULT CURRENT_DATE,
+        faila_nosaukums VARCHAR(255) DEFAULT '',
+        faila_cels VARCHAR(255) NOT NULL,
+        sanemts_datums TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        statuss VARCHAR(50) NOT NULL DEFAULT 'Saņemts',
+        statuss_mainits TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );");
 
-    // Izveidojam tabulu 'sazina', kuru pieprasa atgādinājumu sistēma
+    // 3. Tabula 'sazina'
     $pdo->exec("CREATE TABLE IF NOT EXISTS sazina (
         id SERIAL PRIMARY KEY,
         pieteikuma_id INT REFERENCES pieteikumi(id) ON DELETE CASCADE,
-        vestule TEXT,
+        datums TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        veids VARCHAR(30) NOT NULL,
+        kopsavilkums TEXT NOT NULL,
+        nakama_darbiba VARCHAR(255),
+        nakama_darbiba_datums DATE,
         izveidots TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );");
 
-    // Drošības labad pārliecināmies, ka kolonnām eksistē īstie tipi
-    $pdo->exec("ALTER TABLE pieteikumi ADD COLUMN IF NOT EXISTS statuss VARCHAR(50) DEFAULT 'Saņemts';");
-    $pdo->exec("ALTER TABLE pieteikumi ADD COLUMN IF NOT EXISTS statuss_mainits TIMESTAMP DEFAULT CURRENT_TIMESTAMP;");
+    // Drošības nolūkā izveidojam noklusējuma admin lietotāju, ja tāda vēl nav
+    $defaultAdmin = 'admin';
+    $defaultHash = password_hash('admin123', PASSWORD_DEFAULT);
+    $stmt = $pdo->prepare("INSERT INTO lietotaji (lietotajvards, paroles_hash) VALUES (?, ?) ON CONFLICT (lietotajvards) DO NOTHING");
+    $stmt->execute([$defaultAdmin, $defaultHash]);
 
 } catch (\PDOException $e) {
     echo "Kļūda pieslēdzoties datubāzei: " . $e->getMessage();
