@@ -1,15 +1,13 @@
 <?php
-date_default_timezone_set('Europe/Riga');
+$host = getenv('DB_HOST');
+$db   = getenv('DB_NAME');
+$user = getenv('DB_USER');
+$pass = getenv('DB_PASS');
 
-$pdo = new PDO(
-    'mysql:host=sql209.infinityfree.com;dbname=if0_43311041_izdevnieciba;charset=utf8mb4',
-    'if0_43311041',
-    'Izdevnieciba2026',
-    [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ]
-);
-
-$nobide = (new DateTime('now', new DateTimeZone('Europe/Riga')))->format('P');
-$pdo->exec("SET time_zone = '$nobide'");
+try {
+    $pdo = new PDO("pgsql:host=$host;dbname=$db", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (\PDOException $e) {
+    echo "Kļūda pieslēdzoties datubāzei: " . $e->getMessage();
+}
+?>

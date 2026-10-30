@@ -1,10 +1,4 @@
 FROM php:8.2-apache
-
-# Instalē nepieciešamās PHP paplašinājumu bibliotēkas (piemēram, pdo_mysql)
-RUN docker-php-ext-install pdo pdo_mysql
-
-# Nokopē visus projekta failus uz Apache servera mapi
+RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
 COPY . /var/www/html/
-
-# Atļauj Apache serverim rakstīt un lasīt failus
 RUN chown -R www-data:www-data /var/www/html
