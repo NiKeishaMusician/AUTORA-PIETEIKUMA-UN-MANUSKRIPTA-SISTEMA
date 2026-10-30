@@ -43,7 +43,7 @@ $termini = sazinasTermini($pdo);
     </form>
 
     <?php if (!$neizskatiti): ?>
-      <p>Nav neizskatītu pieteikumu, kas ilgāk par <?= $dienas ?> dienām gaida statusā "Saņemts". 👍</p>
+      <p>Nav neizskatītu pieteikumu, kas ilgāk par <?= $dienas ?> dienām gaida statusā "Saņemts". </p>
     <?php else: ?>
       <?php foreach ($neizskatiti as $p): ?>
         <?php $gaida = (new DateTime($p['statuss_mainits']))->setTime(0, 0)->diff(new DateTime('today'))->days; ?>
@@ -64,7 +64,7 @@ $termini = sazinasTermini($pdo);
     <h3 style="color: #3b2f63; margin-top: 30px;">Pienācis saziņas datums (<?= count($termini) ?>)</h3>
 
     <?php if (!$termini): ?>
-      <p>Nav pieteikumu, kuriem būtu pienācis plānotās saziņas datums. 👍</p>
+      <p>Nav pieteikumu, kuriem būtu pienācis plānotās saziņas datums.</p>
     <?php else: ?>
       <?php foreach ($termini as $p): ?>
         <?php $kave = (new DateTime($p['nakama_darbiba_datums']))->diff(new DateTime('today'))->days; ?>
