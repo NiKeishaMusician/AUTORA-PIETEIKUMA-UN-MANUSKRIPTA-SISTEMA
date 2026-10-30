@@ -8,7 +8,7 @@ try {
     $pdo = new PDO("pgsql:host=$host;dbname=$db", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Automātiski izveidojam tabulas un trūkstošās kolonnas
+    // Automātiski izveidojam visas nepieciešamās tabulas un kolonnas
     $pdo->exec("CREATE TABLE IF NOT EXISTS lietotaji (
         id SERIAL PRIMARY KEY,
         lietotajvards VARCHAR(50) UNIQUE NOT NULL,
@@ -31,7 +31,15 @@ try {
         izveidots TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );");
 
-    // Drošības labad papildus pievienojam kolonnas, ja tabula tika izveidota agrāk
+    // Izveidojam tabulu 'sazina', kuru pieprasa atgādinājumu sistēma
+    $pdo->exec("CREATE TABLE IF NOT EXISTS sazina (
+        id SERIAL PRIMARY KEY,
+        pieteikuma_id INT REFERENCES pieteikumi(id) ON DELETE CASCADE,
+        vestule TEXT,
+        izveidots TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );");
+
+    // Drošības labad pārliecināmies, ka kolonnām eksistē īstie tipi
     $pdo->exec("ALTER TABLE pieteikumi ADD COLUMN IF NOT EXISTS statuss VARCHAR(50) DEFAULT 'Saņemts';");
     $pdo->exec("ALTER TABLE pieteikumi ADD COLUMN IF NOT EXISTS statuss_mainits TIMESTAMP DEFAULT CURRENT_TIMESTAMP;");
 
